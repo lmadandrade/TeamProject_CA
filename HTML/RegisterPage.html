@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Register - Event Planner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="login-container">
+    <h2>Create Your Account</h2>
+
+    <form action="register.php" method="POST" id="registerForm">
+      <input type="text" name="fullname" placeholder="Full Name" required />
+      <input type="email" name="email" placeholder="Email" required />
+      <input type="password" name="password" placeholder="Password" required minlength="6" />
+      <input type="password" name="confirm_password" placeholder="Confirm Password" required minlength="6" />
+
+      <button type="submit">Register</button>
+    </form>
+
+    <div class="links" style="margin-top: 1rem; justify-content: center;">
+      <a href="Login.HTML">Already have an account? Login</a>
+    </div>
+  </div>
+
+</body>
+</html>
