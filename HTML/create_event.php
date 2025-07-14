@@ -15,13 +15,13 @@ if (!isset($_SESSION['user_id'])) {
   <link rel="stylesheet" href="../CSS/style.css" />
 </head>
 <body>
-  <div class="login-container" style="max-width: 600px;">
-    <h2 style="text-align: center;">Create Event</h2>
+  <div class="create-event-container">
+    <h2>Create Event</h2>
 
     <form action="save_event.php" method="POST">
       <input type="text" name="title" placeholder="Event Title" required />
 
-      <div style="display: flex; gap: 1rem;">
+      <div class="inline-fields">
         <input type="date" name="date" required />
         <input type="time" name="time" required />
       </div>
@@ -30,7 +30,7 @@ if (!isset($_SESSION['user_id'])) {
       <input type="text" name="participants" placeholder="Invite Participants" />
       <input type="text" name="social_link" placeholder="Social Media Link" />
 
-      <div style="display: flex; gap: 1rem;">
+      <div class="inline-fields">
         <select name="reminder_timing" required>
           <option value="24hr">24 hours before</option>
           <option value="1hr">1 hour before</option>
@@ -45,11 +45,11 @@ if (!isset($_SESSION['user_id'])) {
         </select>
       </div>
 
-      <textarea name="description" placeholder="Description" rows="4" style="margin-top: 1rem;"></textarea>
+      <textarea name="description" placeholder="Description" rows="4"></textarea>
 
-      <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+      <div class="form-actions">
         <button type="submit">Save Event</button>
-        <a href="dashboard.php" style="text-align:center; flex:1; background: #ccc; padding: 0.5rem; text-decoration: none; border-radius: 5px;">Cancel</a>
+        <a href="dashboard.php" class="cancel-link">Cancel</a>
       </div>
     </form>
   </div>
