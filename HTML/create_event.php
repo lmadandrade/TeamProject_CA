@@ -11,23 +11,31 @@ if (!isset($_SESSION['user_id'])) {
 <head>
   <meta charset="UTF-8" />
   <title>Create Event</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="../CSS/style.css">
 </head>
 <body>
   <div class="create-event-container">
     <h2>Create Event</h2>
-    <form action="save_event.php" method="post">
+
+    <form action="save_event.php" method="POST">
+      <!-- Event Title -->
       <input type="text" name="title" placeholder="Event Title" required />
 
+      <!-- Date and Time -->
       <div class="inline-fields">
-        <input type="date" name="date" required />
-        <input type="time" name="time" required />
+        <input type="date" name="event_date" required />
+        <input type="time" name="event_time" required />
       </div>
 
+      <!-- Location -->
       <input type="text" name="location" placeholder="Location" required />
+
+      <!-- Optional Participants and Social Link -->
       <input type="text" name="participants" placeholder="Invite Participants" />
       <input type="text" name="social_link" placeholder="Social Media Link" />
 
+      <!-- Reminder + Color Picker -->
       <div class="inline-fields">
         <select name="reminder_timing" required>
           <option value="24hr">24 hours before</option>
@@ -43,10 +51,13 @@ if (!isset($_SESSION['user_id'])) {
         </div>
       </div>
 
+      <!-- Description -->
       <textarea name="description" placeholder="Description" rows="4"></textarea>
 
+      <!-- Save / Cancel Buttons -->
       <div class="inline-fields form-actions">
         <input type="submit" value="Save Event" style="background-color: #007bff; color: white; border: none; padding: 0.6rem 1rem; border-radius: 6px; font-weight: bold; cursor: pointer;" />
+        
         <a href="dashboard.php" style="text-decoration: none;">
           <button type="button" style="padding: 0.6rem 1rem; border: none; border-radius: 6px; background-color: #ddd; cursor: pointer;">Cancel</button>
         </a>
