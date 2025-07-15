@@ -1,4 +1,4 @@
-/* GLOBAL */
+/* === GLOBAL === */
 body {
   font-family: Arial, sans-serif;
   background-color: #f2f2f2;
@@ -10,7 +10,7 @@ body {
   align-items: center;
 }
 
-/* DASHBOARD CONTAINER */
+/* === DASHBOARD CONTAINER === */
 .dashboard-wrapper {
   background-color: white;
   border-radius: 25px;
@@ -20,13 +20,12 @@ body {
   text-align: center;
 }
 
-/* DASHBOARD HEADING */
 h2 {
   margin-top: 0;
   font-size: 24px;
 }
 
-/* CALENDAR CONTAINER */
+/* === CALENDAR SECTION === */
 .calendar-box {
   display: inline-block;
   padding: 1rem;
@@ -35,7 +34,6 @@ h2 {
   margin: 1rem 0;
 }
 
-/* CALENDAR HEADER */
 .calendar-header {
   display: flex;
   align-items: center;
@@ -71,7 +69,6 @@ h2 {
   cursor: pointer;
 }
 
-/* CALENDAR TABLE */
 .calendar {
   margin: 0 auto 1rem auto;
   border-spacing: 10px;
@@ -87,20 +84,12 @@ h2 {
   font-weight: bold;
 }
 
-/* EVENT COLORS */
-.calendar td.event-blue {
-  background-color: #b3d7ff;
-}
+/* === EVENT COLORS === */
+.calendar td.event-blue { background-color: #b3d7ff; }
+.calendar td.event-yellow { background-color: #f5f379; }
+.calendar td.event-green { background-color: #b1e5b2; }
 
-.calendar td.event-yellow {
-  background-color: #f5f379;
-}
-
-.calendar td.event-green {
-  background-color: #b1e5b2;
-}
-
-/* UPCOMING EVENTS */
+/* === UPCOMING EVENTS === */
 .upcoming-events {
   text-align: left;
   margin-top: 1rem;
@@ -110,28 +99,51 @@ h2 {
   margin-bottom: 0.8rem;
 }
 
-.event-item {
+/* === EVENT ITEM === */
+a.event-main-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.event-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background-color: #f4f4f4;
   padding: 0.6rem 1rem;
   border-radius: 12px;
   margin-bottom: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.event-left {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  font-size: 0.9rem;
+  gap: 8px;
+}
+
+.event-title {
+  font-weight: bold;
+  font-size: 0.95rem;
+  color: #000;
+}
+
+.event-right {
+  font-size: 0.85rem;
+  color: #888;
+  white-space: nowrap;
 }
 
 .dot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
+  display: inline-block;
+  background-color: #000; /* overwritten inline via PHP */
 }
 
-.dot.blue { background-color: #007bff; }
-.dot.yellow { background-color: #ffeb3b; }
-.dot.green { background-color: #4caf50; }
-
-/* LOGOUT BUTTON */
+/* === LOGOUT BUTTON === */
 .logout-btn {
   margin-top: 1.5rem;
   background-color: #007bff;
@@ -144,9 +156,7 @@ h2 {
   cursor: pointer;
 }
 
-
-
-/* LOGIN & REGISTER STYLES */
+/* === LOGIN / REGISTER === */
 .login-container {
   background-color: white;
   border-radius: 25px;
@@ -214,8 +224,7 @@ h2 {
   text-decoration: none;
 }
 
-
-/* CREATE EVENT FORM */
+/* === CREATE EVENT FORM === */
 .create-event-container {
   background-color: white;
   border-radius: 25px;
@@ -294,7 +303,7 @@ h2 {
   display: inline-block;
 }
 
-/* Color Picker */
+/* === COLOR PICKER === */
 .color-picker-wrapper {
   flex: 1;
 }
@@ -339,6 +348,3 @@ h2 {
   border: none;
   border-radius: 8px;
 }
-
-
-

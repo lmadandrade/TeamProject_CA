@@ -22,11 +22,14 @@ if (!isset($_SESSION['user_id'])) {
       <!-- Event Title -->
       <input type="text" name="title" placeholder="Event Title" required />
 
-      <!-- Date and Time -->
+      <!-- Date Range -->
       <div class="inline-fields">
         <input type="date" name="event_date" required />
-        <input type="time" name="event_time" required />
+        <input type="date" name="event_end_date" placeholder="Optional End Date" />
       </div>
+
+      <!-- Time -->
+      <input type="time" name="event_time" required />
 
       <!-- Location -->
       <input type="text" name="location" placeholder="Location" required />
@@ -46,7 +49,7 @@ if (!isset($_SESSION['user_id'])) {
         <div class="color-picker-wrapper">
           <div class="color-picker-field">
             <label for="colorPicker">Choose a Color</label>
-            <input type="color" id="colorPicker" name="color" value="#F44336" />
+            <input type="color" id="colorPicker" name="color" value="#007bff" />
           </div>
         </div>
       </div>
