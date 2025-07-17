@@ -1,20 +1,27 @@
 <?php
+// Start session so we can check if the user is logged in
 session_start();
+
+// If there's no user logged in, send them back to login
 if (!isset($_SESSION['user_id'])) {
   header("Location: login.php");
   exit;
 }
 
+// Connect to database
 require_once "db.php";
 
+// Check if the event ID is in the URL
 if (!isset($_GET['id'])) {
   echo "No event ID specified.";
   exit;
 }
 
+// Get event ID and logged-in user ID
 $eventId = (int) $_GET['id'];
 $userId = $_SESSION['user_id'];
 
+// Prepare SQL to get the event that matches this user and ID
 $stmt = $conn->prepare("SELECT * FROM events WHERE id = ? AND user_id = ?");
 $stmt->bind_param("ii", $eventId, $userId);
 $stmt->execute();
@@ -22,6 +29,7 @@ $result = $stmt->get_result();
 $event = $result->fetch_assoc();
 $stmt->close();
 
+// If no event found, show message
 if (!$event) {
   echo "Event not found.";
   exit;
@@ -34,6 +42,8 @@ if (!$event) {
   <meta charset="UTF-8" />
   <title>Event Details</title>
   <link rel="stylesheet" href="../CSS/style.css" />
+
+  <!-- I kept some inline styles here just for this page -->
   <style>
     .event-details-container {
       background-color: white;
@@ -119,17 +129,24 @@ if (!$event) {
     }
   </style>
 </head>
+
 <body>
   <div class="event-details-container">
     <h2>Event Details</h2>
 
+    <!-- Each event detail below -->
     <p><label>Event Title:</label> <?php echo htmlspecialchars($event['title']); ?></p>
     <p><label>Date:</label> <?php echo htmlspecialchars($event['event_date']); ?></p>
+
+    <!-- Only show end date if it exists -->
     <?php if (!empty($event['event_end_date'])): ?>
       <p><label>End Date:</label> <?php echo htmlspecialchars($event['event_end_date']); ?></p>
     <?php endif; ?>
+
     <p><label>Time:</label> <?php echo htmlspecialchars($event['event_time']); ?></p>
     <p><label>Location:</label> <?php echo htmlspecialchars($event['location']); ?></p>
+
+    <!-- Show social link if available -->
     <?php if (!empty($event['social_link'])): ?>
       <p><label>Social Media Link:</label>
         <a href="<?php echo htmlspecialchars($event['social_link']); ?>" target="_blank">
@@ -137,11 +154,13 @@ if (!$event) {
         </a>
       </p>
     <?php endif; ?>
+
     <p><label>Description:</label></p>
     <div class="event-description-box">
       <?php echo nl2br(htmlspecialchars($event['description'])); ?>
     </div>
 
+    <!-- Edit and Delete buttons -->
     <div class="action-buttons">
       <a href="create_event.php?edit_id=<?php echo $event['id']; ?>" class="btn-edit">Edit Event</a>
 
@@ -151,6 +170,7 @@ if (!$event) {
       </form>
     </div>
 
+    <!-- Back to dashboard -->
     <a href="dashboard.php" class="btn-back">Back to Dashboard</a>
   </div>
 </body>
