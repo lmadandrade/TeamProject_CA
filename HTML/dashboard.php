@@ -17,34 +17,34 @@ $userId = $_SESSION['user_id'];
 
 // Determine current month/year or use today
 if (isset($_GET['month']) && isset($_GET['year'])) {
-    $currentMonth = (int) $_GET['month'];
-    $currentYear = (int) $_GET['year'];
+  $currentMonth = (int) $_GET['month'];
+  $currentYear = (int) $_GET['year'];
 } else {
-    $currentMonth = date('n');
-    $currentYear = date('Y');
+  $currentMonth = date('n');
+  $currentYear = date('Y');
 }
 
 // Setup navigation for previous/next months
 $prevMonth = $currentMonth - 1;
 $prevYear = $currentYear;
 if ($prevMonth < 1) {
-    $prevMonth = 12;
-    $prevYear--;
+  $prevMonth = 12;
+  $prevYear--;
 }
 
 $nextMonth = $currentMonth + 1;
 $nextYear = $currentYear;
 if ($nextMonth > 12) {
-    $nextMonth = 1;
-    $nextYear++;
+  $nextMonth = 1;
+  $nextYear++;
 }
 
 // Fetch events for this user and current month
 $sql = "SELECT * FROM events 
         WHERE user_id = $userId 
         AND (
-            (MONTH(event_date) = $currentMonth AND YEAR(event_date) = $currentYear) OR
-            (MONTH(event_end_date) = $currentMonth AND YEAR(event_end_date) = $currentYear)
+          (MONTH(event_date) = $currentMonth AND YEAR(event_date) = $currentYear) OR
+          (MONTH(event_end_date) = $currentMonth AND YEAR(event_end_date) = $currentYear)
         )";
 
 $result = mysqli_query($conn, $sql);
@@ -68,7 +68,7 @@ if ($result && mysqli_num_rows($result) > 0) {
       if (date('n', $start) == $currentMonth && date('Y', $start) == $currentYear) {
         $dayKey = date('Y-m-d', $start);
 
-        // Figure out if event is single day or part of a multi-day range
+        // Determine how to display event in calendar
         if ($row['event_date'] === $row['event_end_date'] || empty($row['event_end_date'])) {
           $eventsByDate[$dayKey][] = ['color' => $row['color'], 'type' => 'single'];
         } elseif ($dayKey === date('Y-m-d', strtotime($row['event_date']))) {
@@ -95,8 +95,14 @@ if ($result && mysqli_num_rows($result) > 0) {
 </head>
 <body>
   <div class="dashboard-wrapper">
-    <h2>Dashboard</h2>
+    
+    <!-- Dashboard Header with Centered Title and Gear Icon -->
+    <div class="dashboard-header">
+      <h2 class="dashboard-title">Dashboard</h2>
+      <a href="profile.php" class="gear-link" title="User Settings">&#9881;</a>
+    </div>
 
+    <!-- Calendar Box -->
     <div class="calendar-box">
       <div class="calendar-header">
         <span><?php echo date('F Y', strtotime("$currentYear-$currentMonth-01")); ?></span>
@@ -120,7 +126,7 @@ if ($result && mysqli_num_rows($result) > 0) {
         </form>
       </div>
 
-      <!-- Main calendar table -->
+      <!-- Calendar Table -->
       <table class="calendar">
         <thead>
           <tr>
@@ -129,7 +135,6 @@ if ($result && mysqli_num_rows($result) > 0) {
         </thead>
         <tbody>
           <?php
-          // Setup day counters
           $firstDay = mktime(0, 0, 0, $currentMonth, 1, $currentYear);
           $daysInMonth = date('t', $firstDay);
           $startDay = date('w', $firstDay);
@@ -137,12 +142,10 @@ if ($result && mysqli_num_rows($result) > 0) {
           $day = 1;
           echo "<tr>";
 
-          // Fill in blank cells before the first day
           for ($i = 0; $i < $startDay; $i++) {
             echo "<td></td>";
           }
 
-          // Loop through each day of the month
           while ($day <= $daysInMonth) {
             if (($startDay + $day - 1) % 7 == 0 && $day != 1) {
               echo "</tr><tr>";
@@ -154,7 +157,6 @@ if ($result && mysqli_num_rows($result) > 0) {
             echo "<td class='calendar-day' data-date='$dateKey' $onclick>";
             echo "<div>$day</div>";
 
-            // Show event bar(s) if this day has events
             if (isset($eventsByDate[$dateKey])) {
               foreach ($eventsByDate[$dateKey] as $event) {
                 $color = htmlspecialchars($event['color']);
@@ -173,7 +175,7 @@ if ($result && mysqli_num_rows($result) > 0) {
       </table>
     </div>
 
-    <!-- Upcoming Events Section -->
+    <!-- Upcoming Events List -->
     <div class="upcoming-events">
       <h4>Upcoming Events</h4>
 
@@ -186,7 +188,6 @@ if ($result && mysqli_num_rows($result) > 0) {
                 <span class="dot" style="background-color: <?php echo htmlspecialchars($event['color']); ?>;"></span>
                 <strong class="event-title"><?php echo htmlspecialchars($event['title']); ?></strong>
               </div>
-
               <div class="event-right">
                 <span class="event-datetime">
                   <?php
@@ -209,13 +210,13 @@ if ($result && mysqli_num_rows($result) > 0) {
       <?php endif; ?>
     </div>
 
-    <!-- Logout Button -->
+    <!-- Logout -->
     <form action="logout.php" method="POST">
       <button type="submit" class="logout-btn">Logout</button>
     </form>
   </div>
 
-  <!-- Event Modal for selected day -->
+  <!-- Event Modal -->
   <div id="dayEventModal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
@@ -227,7 +228,6 @@ if ($result && mysqli_num_rows($result) > 0) {
   <script>
     const allEvents = <?php echo json_encode($events); ?>;
 
-    // Show event modal for selected day
     function showDayEvents(date) {
       const modal = document.getElementById("dayEventModal");
       const modalDate = document.getElementById("modal-date");
@@ -245,7 +245,6 @@ if ($result && mysqli_num_rows($result) > 0) {
       modalDate.innerText = date;
       modalEvents.innerHTML = "";
 
-      // Create the HTML for each event
       events.forEach(event => {
         const item = document.createElement("div");
         item.className = "modal-event";
