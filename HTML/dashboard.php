@@ -15,6 +15,10 @@ if (!isset($_SESSION['user_id'])) {
 require_once "db.php";
 $userId = $_SESSION['user_id'];
 
+// 
+require_once "sendMail.php";
+//sendReminderEmails($conn);
+
 // Determine current month/year or use today
 if (isset($_GET['month']) && isset($_GET['year'])) {
   $currentMonth = (int) $_GET['month'];
@@ -45,7 +49,7 @@ $sql = "SELECT * FROM events
         AND (
           (MONTH(event_date) = $currentMonth AND YEAR(event_date) = $currentYear) OR
           (MONTH(event_end_date) = $currentMonth AND YEAR(event_end_date) = $currentYear)
-        )";
+        )ORDER BY event_date ASC, event_time ASC";
 
 $result = mysqli_query($conn, $sql);
 
@@ -91,9 +95,37 @@ if ($result && mysqli_num_rows($result) > 0) {
   <meta charset="UTF-8" />
   <title>Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Load bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- load external CSS file -->
   <link rel="stylesheet" href="../CSS/style.css" />
 </head>
 <body>
+
+    <!-- navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="dashboard.php"><strong>Eventz</strong></a>
+      
+      <!-- hamerburger menu toggler for small screens -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+        <!-- left navigation -->
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="dashboard.php">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="create_event.php">Create Event</a></li>
+        </ul>
+        <!-- right navigation -->
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
   <div class="dashboard-wrapper">
     
     <!-- Dashboard Header with Centered Title and Gear Icon -->
@@ -270,5 +302,13 @@ if ($result && mysqli_num_rows($result) > 0) {
       }
     }
   </script>
+
+  <footer class="footer">
+    <div class="container">
+      Eventz © 2025
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

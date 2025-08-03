@@ -14,10 +14,36 @@ if (!isset($_SESSION['user_id'])) {
   <meta charset="UTF-8" />
   <title>Create Event</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Linking the CSS file -->
-  <link rel="stylesheet" href="../CSS/style.css">
+  <!-- Load bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- load external CSS file -->
+  <link rel="stylesheet" href="../CSS/style.css" />
 </head>
 <body>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="dashboard.php"><strong>Eventz</strong></a>
+      
+      <!-- hamerburger menu toggler for small screens -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+        <!-- left navigation -->
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="dashboard.php">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="create_event.php">Create Event</a></li>
+        </ul>
+        <!-- right navigation -->
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
   <div class="create-event-container">
     <!-- Title of the form -->
@@ -50,7 +76,7 @@ if (!isset($_SESSION['user_id'])) {
 
       <!-- Dropdown and color selector -->
       <div class="inline-fields">
-        <select name="reminder_timing" required>
+        <select name="reminder_time" required>
           <option value="24hr">24 hours before</option>
           <option value="1hr">1 hour before</option>
           <option value="custom">Custom</option>
@@ -84,6 +110,14 @@ if (!isset($_SESSION['user_id'])) {
       </div>
     </form>
   </div>
+
+  <footer class="footer">
+    <div class="container">
+      Eventz © 2025
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 
 </body>
 </html>

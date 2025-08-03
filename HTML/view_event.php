@@ -41,6 +41,9 @@ if (!$event) {
 <head>
   <meta charset="UTF-8" />
   <title>Event Details</title>
+  <!-- Load bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- load external CSS file -->
   <link rel="stylesheet" href="../CSS/style.css" />
 
   <!-- I kept some inline styles here just for this page -->
@@ -131,6 +134,31 @@ if (!$event) {
 </head>
 
 <body>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="dashboard.php"><strong>Eventz</strong></a>
+      
+      <!-- hamerburger menu toggler for small screens -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+        <!-- left navigation -->
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="dashboard.php">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="create_event.php">Create Event</a></li>
+        </ul>
+        <!-- right navigation -->
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
   <div class="event-details-container">
     <h2>Event Details</h2>
 
@@ -173,5 +201,12 @@ if (!$event) {
     <!-- Back to dashboard -->
     <a href="dashboard.php" class="btn-back">Back to Dashboard</a>
   </div>
+
+  <footer class="footer">
+    <div class="container">
+      Eventz © 2025
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

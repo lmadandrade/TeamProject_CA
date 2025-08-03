@@ -14,6 +14,8 @@ if (!isset($_SESSION['user_id'])) {
 
 // include database connection file
 require_once "db.php";
+// include connection to send mail file
+require_once "sendMail.php";
 
 // get the user ID from session
 $user_id = $_SESSION['user_id'];
@@ -26,7 +28,7 @@ $event_time = $_POST['event_time'];
 $location = $_POST['location'];
 $participants = $_POST['participants'];
 $social_link = $_POST['social_link'];
-$reminder_timing = $_POST['reminder_timing'];
+$reminder_timing = $_POST['reminder_time'];
 $color = $_POST['color'];
 $description = $_POST['description'];
 
@@ -42,7 +44,7 @@ if (empty($title) || empty($event_date) || empty($event_time) || empty($color) |
 
 // write the SQL query to save the event
 $stmt = $conn->prepare("INSERT INTO events 
-(user_id, title, event_date, event_end_date, event_time, location, participants, social_link, reminder_timing, color, description)
+(user_id, title, event_date, event_end_date, event_time, location, participants, social_link, reminder_time, color, description)
 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 // attach values to the query
@@ -50,6 +52,20 @@ $stmt->bind_param("issssssssss", $user_id, $title, $event_date, $event_end_date,
 
 // run the query and check if it worked
 if ($stmt->execute()) {
+    // get session email
+    $user_email = $_SESSION['user_email'];
+
+    // get content for email
+    $eventDetails = [
+        'title' => $title,
+        'event_date' => $event_date,
+        'event_time' => $event_time,
+        'location' => $location,
+    ];
+
+    // send email to confirm event created
+    //sendEventCreatedEmail($user_email, $eventDetails);
+
     // go back to dashboard if success
     header("Location: dashboard.php");
     exit;

@@ -79,10 +79,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta charset="UTF-8" />
   <title>Register - Event Planner</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Load bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <!-- load external CSS file -->
   <link rel="stylesheet" href="../CSS/style.css" />
 </head>
 <body>
+
+    <!-- navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="index.html"><strong>Eventz</strong></a>
+      
+      <!-- hamerburger menu toggler for small screens -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+        <!-- left navigation -->
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        </ul>
+        <!-- right navigation -->
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
+          <li class="nav-item"><a class="nav-link" href="register.php">Register</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main>
   <div class="login-container">
     <h2>Create your account</h2>
 
@@ -100,5 +128,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <a href="login.php">Already have an account? Login here</a>
     </div>
   </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      Eventz © 2025
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
