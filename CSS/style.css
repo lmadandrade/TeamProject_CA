@@ -553,9 +553,7 @@ a.event-main-link {
 }
 
 /* Profile input fields */
-.profile-form input[type="text"],
-.profile-form input[type="email"],
-.profile-form select {
+.profile-input {
   padding: 0.6rem;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -578,6 +576,92 @@ a.event-main-link {
 
 .delete-account a:hover {
   text-decoration: underline;
+}
+
+/*** Invitations Styling ***/
+
+.btn-accept {
+  background-color: #1a73e8;
+	color: #fff;
+	border: none;
+}
+.btn-accept:hover {
+	background-color: #1558b0;
+	color: #fff;
+}
+
+.btn-decline {
+	background-color: #e53935;
+	color: #fff;
+	border: none;
+}
+.btn-decline:hover {
+	background-color: #c62828;
+	color: #fff;
+}
+
+
+/* edit event styling*/
+.update-details-container{
+  background:#fff;
+  border: 1px solid lightgray;
+  border-radius:25px;
+  padding:2.5rem 3rem;
+  max-width:600px;
+  margin:3rem auto;
+  text-align:left;
+}
+.update-details-container h2{
+  text-align:center;
+  margin-bottom:2rem;
+}
+
+.update-details-container label{
+  margin:8px 0 6px;
+}
+
+.update-details-container input[type="number"]{
+  display:block;
+  width:240px;
+  max-width:100%;
+  padding:.5rem .65rem;
+  border:1px solid #ccc;
+  border-radius:8px;
+  font-size:14px;
+}
+.update-details-container input[type="color"]{
+  display:block;
+  width:58px;
+  height:48px;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+}
+
+
+.update-details-container .form-actions{
+  margin-top:12px;
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+/* Buttons (uses your class names) */
+.save-btn{
+  background:#1a73e8;
+  color:#fff;
+  padding:.6rem 1.2rem;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+.cancel-btn{
+  background:#ccc;
+  color:#333;
+  padding:.6rem 1.2rem;
+  border:none;
+  border-radius:8px;
 }
 
 

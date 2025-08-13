@@ -17,7 +17,7 @@ $userId = $_SESSION['user_id'];
 
 // 
 require_once "sendMail.php";
-//sendReminderEmails($conn);
+sendReminderEmails($conn);
 
 // Determine current month/year or use today
 if (isset($_GET['month']) && isset($_GET['year'])) {
@@ -43,13 +43,26 @@ if ($nextMonth > 12) {
   $nextYear++;
 }
 
-// Fetch events for this user and current month
-$sql = "SELECT * FROM events 
-        WHERE user_id = $userId 
-        AND (
-          (MONTH(event_date) = $currentMonth AND YEAR(event_date) = $currentYear) OR
-          (MONTH(event_end_date) = $currentMonth AND YEAR(event_end_date) = $currentYear)
-        )ORDER BY event_date ASC, event_time ASC";
+// get user id
+$userId = $_SESSION['user_id'];
+// change to int
+$userId = (int)$userId;
+// Fetch events for this user that have yet to happen
+$sql = "SELECT
+  e.id,
+  e.title,
+  e.event_date,
+  e.event_end_date,
+  e.location,
+  e.social_link,
+  e.description,
+  ep.color AS color
+  FROM events e
+  JOIN event_participants ep ON ep.event_id = e.id
+  WHERE ep.user_id = $userId
+  AND ep.status = 'accepted'
+  AND COALESCE(e.event_end_date, e.event_date) >= NOW()
+  ORDER BY e.event_date ASC";
 
 $result = mysqli_query($conn, $sql);
 
@@ -117,6 +130,7 @@ if ($result && mysqli_num_rows($result) > 0) {
         <ul class="navbar-nav">
           <li class="nav-item"><a class="nav-link" href="dashboard.php">Dashboard</a></li>
           <li class="nav-item"><a class="nav-link" href="create_event.php">Create Event</a></li>
+          <li class="nav-item"><a class="nav-link" href="invitations.php">Invitations</a></li>
         </ul>
         <!-- right navigation -->
         <ul class="navbar-nav">
@@ -225,8 +239,8 @@ if ($result && mysqli_num_rows($result) > 0) {
                   <?php
                     echo htmlspecialchars(
                       $event['event_end_date']
-                        ? date('F j, Y', strtotime($event['event_date'])) . ' – ' . date('F j, Y', strtotime($event['event_end_date'])) . ' ' . date('g:iA', strtotime($event['event_time']))
-                        : date('F j, Y g:iA', strtotime($event['event_date'] . ' ' . $event['event_time']))
+                        ? date('F j, Y', strtotime($event['event_date'])) . ' – ' . date('F j, Y', strtotime($event['event_end_date'])) . ' ' . date('g:iA', strtotime($event['event_date']))
+                        : date('F j, Y g:iA', strtotime($event['event_date']))
                     );
                   ?>
                 </span>
@@ -278,12 +292,15 @@ if ($result && mysqli_num_rows($result) > 0) {
       modalEvents.innerHTML = "";
 
       events.forEach(event => {
+        // get the event time
+        const time = event.event_date.slice(11, 16);
+
         const item = document.createElement("div");
         item.className = "modal-event";
         item.innerHTML = `
           <span class="dot" style="background-color: ${event.color};"></span>
           <strong>${event.title}</strong><br>
-          <small>${event.event_time}</small>
+          <small>${time}</small>
         `;
         modalEvents.appendChild(item);
       });

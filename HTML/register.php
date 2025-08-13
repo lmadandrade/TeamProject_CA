@@ -58,12 +58,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $conn->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
     $stmt->bind_param("sss", $fullname, $email, $hashedPassword);
 
-    // if saved, redirect to login with success message
+    // if saved, check to see if email was a guest
     if ($stmt->execute()) {
-        header("Location: login.php?success=1");
-        exit;
+      // get new users userID
+      $newUserId = $stmt->insert_id;
+      $stmt->close();
+
+      // update event participants to give the newly created user an id and set email field to null
+      $replaceEmail = $conn->prepare(" UPDATE event_participants
+      SET user_id = ?, email = NULL
+      WHERE user_id IS NULL AND email = ?
+      ");
+
+      $replaceEmail->bind_param("is", $newUserId, $email);
+      $replaceEmail->execute();
+      $replaceEmail->close();
+
+      // redirect to login
+      header("Location: login.php?success=1");
+      exit;
     } else {
-        echo "Error: " . $stmt->error;
+      echo "Error: " . $stmt->error;
     }
 
     $stmt->close();

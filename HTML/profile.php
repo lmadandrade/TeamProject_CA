@@ -9,21 +9,21 @@ require_once "db.php";
 
 // Fetch user data
 $userId = $_SESSION['user_id'];
-$stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
+$stmt = $conn->prepare("SELECT id, name, email FROM users WHERE id = ?");
 $stmt->bind_param("i", $userId);
 $stmt->execute();
-$result = $stmt->get_result();
-$user = $result->fetch_assoc();
+$user = $stmt->get_result()->fetch_assoc();
 $stmt->close();
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $fullname = trim($_POST['fullname']);
-  $default_reminder = $_POST['default_reminder'];
-  $default_color = $_POST['default_color'];
+  $newPassword = $_POST['password'] ?? '';
+  // hash for security
+  $hashedNewPassword = password_hash($newPassword, PASSWORD_BCRYPT);
 
-  $stmt = $conn->prepare("UPDATE users SET name = ?, default_reminder = ?, default_color = ? WHERE id = ?");
-  $stmt->bind_param("sssi", $fullname, $default_reminder, $default_color, $userId);
+  // update
+  $stmt = $conn->prepare("UPDATE users SET password = ? WHERE id = ?");
+  $stmt->bind_param("si", $hashedNewPassword, $userId);
 
   if ($stmt->execute()) {
     header("Location: dashboard.php");
@@ -42,10 +42,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta charset="UTF-8" />
   <title>User Profile</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Adjust the path below if needed based on your folder structure -->
-  <link rel="stylesheet" href="../CSS/style.css" />
+  <!-- Load bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- load external CSS file -->
+  <link rel="stylesheet" href="../CSS/style.css" /></head>
+
 </head>
 <body>
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+        <a class="navbar-brand" href="dashboard.php"><strong>Eventz</strong></a>
+        
+        <!-- hamerburger menu toggler for small screens -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+            <!-- left navigation -->
+            <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" href="dashboard.php">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link" href="create_event.php">Create Event</a></li>
+            <li class="nav-item"><a class="nav-link" href="invitations.php">Invitations</a></li>
+            </ul>
+            <!-- right navigation -->
+            <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
+            </ul>
+        </div>
+        </div>
+    </nav>
 
   <div class="profile-wrapper">
     <h2>User Profile</h2>
@@ -55,30 +82,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       <div>
         <label for="fullname">Full Name:</label>
-        <input type="text" id="fullname" name="fullname" value="<?php echo htmlspecialchars($user['name']); ?>" required />
+        <input type="text" class="profile-input" id="fullname" name="fullname" value="<?php echo htmlspecialchars($user['name']); ?>" disabled />
       </div>
 
       <div>
         <label for="email">Email Address:</label>
-        <input type="email" id="email" value="<?php echo htmlspecialchars($user['email']); ?>" disabled />
+        <input type="email" class="profile-input" id="email" value="<?php echo htmlspecialchars($user['email']); ?>" disabled />
       </div>
 
       <div>
-        <label for="default_reminder">Default Reminder:</label>
-        <select id="default_reminder" name="default_reminder">
-          <option value="24hr" <?php if ($user['default_reminder'] === '24hr') echo 'selected'; ?>>24 hours before</option>
-          <option value="1hr" <?php if ($user['default_reminder'] === '1hr') echo 'selected'; ?>>1 hour before</option>
-          <option value="custom" <?php if ($user['default_reminder'] === 'custom') echo 'selected'; ?>>Custom</option>
-        </select>
-      </div>
-
-      <div>
-        <label for="default_color">Default Event Color:</label>
-        <select id="default_color" name="default_color">
-          <option value="Blue" <?php if ($user['default_color'] === 'Blue') echo 'selected'; ?>>Blue</option>
-          <option value="Yellow" <?php if ($user['default_color'] === 'Yellow') echo 'selected'; ?>>Yellow</option>
-          <option value="Green" <?php if ($user['default_color'] === 'Green') echo 'selected'; ?>>Green</option>
-        </select>
+        <label for="password">Password:</label>
+        <input type="password" class="profile-input" name="password" placeholder="Enter new password" minlength="8"required />
       </div>
 
       <div class="form-actions">
@@ -91,6 +105,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
     </form>
   </div>
+
+  <footer class="footer">
+    <div class="container">Eventz © 2025</div>
+  </footer>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

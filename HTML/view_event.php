@@ -22,8 +22,17 @@ $eventId = (int) $_GET['id'];
 $userId = $_SESSION['user_id'];
 
 // Prepare SQL to get the event that matches this user and ID
-$stmt = $conn->prepare("SELECT * FROM events WHERE id = ? AND user_id = ?");
-$stmt->bind_param("ii", $eventId, $userId);
+$stmt = $conn->prepare(" SELECT DISTINCT e.*
+    FROM events e
+    LEFT JOIN event_participants ep
+    ON ep.event_id = e.id
+    AND ep.status IN ('accepted','pending')
+    AND (ep.user_id = ? OR (ep.user_id IS NULL AND ep.email = ?))
+    WHERE e.id = ?
+    AND (e.user_id = ? OR ep.id IS NOT NULL)
+");
+
+$stmt->bind_param("isii", $userId, $userEmail, $eventId, $userId);
 $stmt->execute();
 $result = $stmt->get_result();
 $event = $result->fetch_assoc();
@@ -150,6 +159,7 @@ if (!$event) {
         <ul class="navbar-nav">
           <li class="nav-item"><a class="nav-link" href="dashboard.php">Dashboard</a></li>
           <li class="nav-item"><a class="nav-link" href="create_event.php">Create Event</a></li>
+          <li class="nav-item"><a class="nav-link" href="invitations.php">Invitations</a></li>
         </ul>
         <!-- right navigation -->
         <ul class="navbar-nav">
@@ -171,7 +181,7 @@ if (!$event) {
       <p><label>End Date:</label> <?php echo htmlspecialchars($event['event_end_date']); ?></p>
     <?php endif; ?>
 
-    <p><label>Time:</label> <?php echo htmlspecialchars($event['event_time']); ?></p>
+    <p><label>Time:</label> <?= htmlspecialchars(date('g:i A', strtotime($event['event_date']))) ?></p>
     <p><label>Location:</label> <?php echo htmlspecialchars($event['location']); ?></p>
 
     <!-- Show social link if available -->
@@ -190,7 +200,7 @@ if (!$event) {
 
     <!-- Edit and Delete buttons -->
     <div class="action-buttons">
-      <a href="create_event.php?edit_id=<?php echo $event['id']; ?>" class="btn-edit">Edit Event</a>
+      <a href="edit_event_settings.php?event_id=<?= (int)$event['id'] ?>" class="btn-edit">Edit Event</a>
 
       <form action="delete_event.php" method="POST" onsubmit="return confirm('Are you sure you want to delete this event?');">
         <input type="hidden" name="event_id" value="<?php echo $event['id']; ?>">

@@ -36,6 +36,7 @@ if (!isset($_SESSION['user_id'])) {
         <ul class="navbar-nav">
           <li class="nav-item"><a class="nav-link" href="dashboard.php">Dashboard</a></li>
           <li class="nav-item"><a class="nav-link" href="create_event.php">Create Event</a></li>
+          <li class="nav-item"><a class="nav-link" href="invitations.php">Invitations</a></li>
         </ul>
         <!-- right navigation -->
         <ul class="navbar-nav">
@@ -74,19 +75,15 @@ if (!isset($_SESSION['user_id'])) {
       <input type="text" name="participants" placeholder="Invite Participants" />
       <input type="text" name="social_link" placeholder="Social Media Link" />
 
-      <!-- Dropdown and color selector -->
+      <!-- Input and color selector -->
       <div class="inline-fields">
-        <select name="reminder_time" required>
-          <option value="24hr">24 hours before</option>
-          <option value="1hr">1 hour before</option>
-          <option value="custom">Custom</option>
-        </select>
+        <input type="number" id="reminderHours" class="form-control" name="reminder_time" placeholder="Reminder - Hours" min="1" max="168" required/>
 
         <!-- Color picker for the event's visual tag -->
         <div class="color-picker-wrapper">
           <div class="color-picker-field">
             <label for="colorPicker">Choose a Color</label>
-            <input type="color" id="colorPicker" name="color" value="#007bff" />
+            <input type="color" id="colorPicker" name="color" value="#007bff" required/>
           </div>
         </div>
       </div>
