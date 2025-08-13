@@ -43,22 +43,35 @@ $myColor = $row['color'];
 
 // Handle save
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $newRiminderHours = (int)$_POST['reminder_hrs'];
-  // convert to minuts
-  $newRiminderMinutes =  $newRiminderHours * 60;
-  $color = $_POST['color'];
+    $newRiminderHours = (int)$_POST['reminder_hrs'];
 
-  $u = $conn->prepare("
-    UPDATE event_participants
-    SET reminder_minutes_before = ?, color = ?
-    WHERE event_id = ? AND user_id = ?
-  ");
-  $u->bind_param("isii", $newRiminderMinutes, $color, $eventId, $userId);
-  $u->execute();
-  $u->close();
+    // get event start time in seconds
+    $eventSTS = strtotime($row['event_date']); 
+    $secondsUntilEvent = $eventSTS - time(); // find how many seconds between now and event
+    $reminder_hours = (int)$newRiminderHours;
+    $reminder_seconds = $reminder_hours * 3600;
 
-  header("Location: view_event.php?id=" . $eventId);
-  exit;
+    // check that reminder doesnt occur after event
+    if (($reminder_seconds) >= $secondsUntilEvent) {
+        echo "<script>alert('Reminder must be before the event');window.location.href='edit_event_settings.php?event_id=" . $eventId . "'; </script>";
+        exit;
+    }
+  
+    // convert to minuts
+    $newRiminderMinutes =  $newRiminderHours * 60;
+    $color = $_POST['color'];
+
+    $u = $conn->prepare("
+        UPDATE event_participants
+        SET reminder_minutes_before = ?, color = ?
+        WHERE event_id = ? AND user_id = ?
+    ");
+    $u->bind_param("isii", $newRiminderMinutes, $color, $eventId, $userId);
+    $u->execute();
+    $u->close();
+
+    header("Location: view_event.php?id=" . $eventId);
+    exit;
 }
 ?>
 

@@ -50,6 +50,19 @@ if (strtotime($event_date) <= time()) {
     exit;
 }
 
+// get event start time in seconds
+$eventSTS = strtotime($event_date); 
+$secondsUntilEvent = $eventSTS - time(); // find how many seconds between now and event
+$reminder_hours = (int)$reminder_timing;
+$reminder_seconds = $reminder_hours * 3600;
+
+// check that your reminder time happens before event
+if (($reminder_seconds) >= $secondsUntilEvent) {
+    echo "<script>alert('Reminder must be before the event');window.location.href='create_event.php'; </script>";
+    exit;
+
+}
+
 // check that end date isnt empty and if isnt make sure it comes after event date
 if (!empty($event_end_date)) {
     $event_end_date = $event_end_date . ' ' . $event_time . ':00';
