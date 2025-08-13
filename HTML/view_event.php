@@ -202,9 +202,9 @@ if (!$event) {
     <div class="action-buttons">
       <a href="edit_event_settings.php?event_id=<?= (int)$event['id'] ?>" class="btn-edit">Edit Event</a>
 
-      <form action="delete_event.php" method="POST" onsubmit="return confirm('Are you sure you want to delete this event?');">
+      <form action="cancel_event.php" method="POST" onsubmit="return confirm('Are you sure you want to cancel participation in this event?');">
         <input type="hidden" name="event_id" value="<?php echo $event['id']; ?>">
-        <button type="submit" class="btn-delete">Delete Event</button>
+        <button type="submit" class="btn-delete">Mark Decline</button>
       </form>
     </div>
 

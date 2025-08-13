@@ -120,8 +120,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <button type="submit">LOGIN</button>
     </form>
 
-    <!-- maybe I'll hook this up later -->
-    <button class="invitation-btn">Sign in with Invitation</button>
+    <!-- maybe I'll hook this up later 
+    <!-- <button class="invitation-btn">Sign in with Invitation</button> -->
 
     <!-- links for users who forgot or want to register -->
     <div class="links">

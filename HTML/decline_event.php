@@ -16,7 +16,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['event_id'])) {
   $userId = $_SESSION['user_id'];
 
   // Delete the event only if it belongs to the current user
-  $stmt = $conn->prepare("DELETE FROM events WHERE id = ? AND user_id = ?");
+  $stmt = $conn->prepare(" UPDATE event_participants
+    SET status = 'declined'
+    WHERE event_id = ? 
+    AND user_id = ?
+  ");
+
   $stmt->bind_param("ii", $eventId, $userId);
   $stmt->execute();
   $stmt->close();
